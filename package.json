@@ -1,0 +1,15 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "scraper": "node resources/js/scraper/index.js",
+        "scraper:supermercado-koch": "node resources/js/scraper/index.js supermercado-koch",
+        "scraper:bistek": "node resources/js/scraper/index.js bistek"
+    },
+    "dependencies": {
+        "axios": "^1.6.0",
+        "commander": "^11.1.0",
+        "jsdom": "^22.1.0",
+        "puppeteer": "^21.3.8"
+    }
+}
