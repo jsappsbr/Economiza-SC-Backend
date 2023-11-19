@@ -1,0 +1,49 @@
+name: Deploy to Production Server
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Upload files to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ vars.PRODUCTION_SERVER_HOST }}
+          username: ${{ vars.PRODUCTION_SERVER_USERNAME }}
+          key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
+          source: "./"
+          target: "/var/www/new-version"
+
+      - name: Setup new version on Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.PRODUCTION_SERVER_HOST }}
+          username: ${{ vars.PRODUCTION_SERVER_USERNAME }}
+          key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
+          script: |
+            sudo service nginx stop
+            cd /var/www
+            cp app/.env new-version/.env
+            sudo rm -rf app
+            mv new-version app
+            sudo chmod -R 755 app
+            cd app
+            sudo chmod -R a+rw storage
+            php artisan migrate --force --no-interaction
+            sudo service nginx start
