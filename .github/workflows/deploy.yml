@@ -2,7 +2,7 @@ name: Deploy to Production Server
 
 on:
   push:
-    branches: [ main ]
+    branches: [ deploy ]
 
 jobs:
   deploy:
@@ -11,7 +11,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: main
+          ref: deploy
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
