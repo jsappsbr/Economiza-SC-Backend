@@ -13,22 +13,23 @@ jobs:
         with:
           ref: deploy
 
-#      - name: Setup PHP
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: 8.2
-#
-#      - name: Install Composer dependencies
-#        run: composer install --prefer-dist --no-interaction
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
 
-#      - name: Upload files to server
-#        uses: appleboy/scp-action@master
-#        with:
-#          host: ${{ secrets.PRODUCTION_SERVER_HOST }}
-#          username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
-#          key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
-#          source: "./"
-#          target: "/tmp/new-version"
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Upload files to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_SERVER_HOST }}
+          username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
+          key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
+          source: "./"
+          target: "/tmp/new-version"
+
       - name: Setup new version on Server
         uses: appleboy/ssh-action@master
         with:
@@ -36,22 +37,13 @@ jobs:
           username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
           key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
           script: |
-            echo "It works!"
-
-#      - name: Setup new version on Server
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.PRODUCTION_SERVER_HOST }}
-#          username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
-#          key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
-#          script: |
-#            sudo service nginx stop
-#            cp /var/www/app/.env /tmp/new-version/.env
-#            cd /var/www
-#            sudo rm -rf app
-#            sudo mv /tmp/new-version app
-#            sudo chmod -R 755 app
-#            cd app
-#            sudo chmod -R a+rw storage
-#            php artisan migrate --force --no-interaction
-#            sudo service nginx start
+            sudo service nginx stop
+            cp /var/www/app/.env /tmp/new-version/.env
+            cd /var/www
+            sudo rm -rf app
+            sudo mv /tmp/new-version app
+            sudo chmod -R 755 app
+            cd app
+            sudo chmod -R a+rw storage
+            php artisan migrate --force --no-interaction
+            sudo service nginx start
