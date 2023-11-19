@@ -24,8 +24,8 @@ jobs:
       - name: Upload files to server
         uses: appleboy/scp-action@master
         with:
-          host: ${{ vars.PRODUCTION_SERVER_HOST }}
-          username: ${{ vars.PRODUCTION_SERVER_USERNAME }}
+          host: ${{ secrets.PRODUCTION_SERVER_HOST }}
+          username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
           key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
           source: "./"
           target: "/var/www/new-version"
@@ -33,8 +33,8 @@ jobs:
       - name: Setup new version on Server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ vars.PRODUCTION_SERVER_HOST }}
-          username: ${{ vars.PRODUCTION_SERVER_USERNAME }}
+          host: ${{ secrets.PRODUCTION_SERVER_HOST }}
+          username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
           key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
           script: |
             sudo service nginx stop
