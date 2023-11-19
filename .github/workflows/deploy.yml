@@ -28,7 +28,7 @@ jobs:
           username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
           key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
           source: "./"
-          target: "~/new-version"
+          target: "/tmp/new-version"
 
       - name: Setup new version on Server
         uses: appleboy/ssh-action@master
@@ -38,10 +38,10 @@ jobs:
           key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
           script: |
             sudo service nginx stop
-            cp /var/www/app/.env ~/new-version/.env
+            cp /var/www/app/.env /tmp/new-version/.env
             cd /var/www
             sudo rm -rf app
-            sudo mv ~/new-version app
+            sudo mv /tmp/new-version app
             sudo chmod -R 755 app
             cd app
             sudo chmod -R a+rw storage
