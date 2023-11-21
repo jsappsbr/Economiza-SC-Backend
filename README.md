@@ -13,3 +13,8 @@ php artisan migrate:fresh --seed
 ```bash
 php artisan app:products-scraper {market} {--skip-scraper} {--skip-save}
 ```
+- Install Node dependencies
+
+```bash
+npm install
+```
