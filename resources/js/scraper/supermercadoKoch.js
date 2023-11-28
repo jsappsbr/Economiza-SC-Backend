@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import fs from 'node:fs';
+import logger from "./logging/index.js";
 
 // Got from the stores modal select that shows up when a
 // new browser is opened and the store is not defined yet
@@ -70,9 +71,18 @@ async function scrapeProducts(browser, pageLink, storeValue) {
     let currentPageLink = pageLink
 
     while (true) {
-        console.info(`Scraping ${currentPageLink} for store ${storeValue}`)
+        logger.info(`Scraping ${currentPageLink} for store ${storeValue}`)
 
         const page = await browser.newPage();
+        await page.setRequestInterception(true);
+
+        page.on('request', (request) => {
+            if (['image', 'stylesheet', 'font'].indexOf(request.resourceType()) !== -1) {
+                request.abort();
+            } else {
+                request.continue();
+            }
+        });
 
         // This is the used by the website to know which store to use
         await page.setCookie({name: 'customer_website', value: storeValue, domain: 'www.superkoch.com.br', path: '/'})
