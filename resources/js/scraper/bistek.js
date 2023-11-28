@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import axios from 'axios'
 import jsdom from 'jsdom'
+import logger from "./logging/index.js";
 
 const MARKETS = [
     {
@@ -65,7 +66,7 @@ const PRODUCTS_PER_PAGE = 36
 
 const run = async () => {
     for (const market of MARKETS) {
-        console.info(`Starting scraping ${market.name}`)
+        logger.info(`Starting scraping ${market.name}`)
 
         const promises = []
 
@@ -75,7 +76,7 @@ const run = async () => {
 
         await Promise.all(promises)
 
-        console.info(`Finished scraping ${market.name}`)
+        logger.info(`Finished scraping ${market.name}`)
     }
 }
 
@@ -99,7 +100,7 @@ async function scrapeProducts(market, pagePath) {
 }
 
 async function scrapePageProducts(pageLink, totalPages, page) {
-    console.info(`Scraping ${pageLink} page ${page}/${totalPages}`)
+    logger.info(`Scraping ${pageLink} page ${page}/${totalPages}`)
 
     const response = await axios.get(pageLink, {
         params: {
@@ -116,13 +117,9 @@ async function scrapePageProducts(pageLink, totalPages, page) {
     for (const item of items) {
         products.push({
             name: item.querySelector('a.product-item-link')?.innerHTML?.trim(),
-
             price: item.querySelector('.price-wrapper').getAttribute('data-price-amount'),
-
             picture: item.querySelector('img.product-image-photo').src,
-
             link: item.querySelector('a.product.photo.product-item-photo').href,
-
             sku: item.querySelector('.price-box.price-final_price').getAttribute('data-product-id'),
         })
     }

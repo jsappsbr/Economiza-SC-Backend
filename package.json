@@ -10,6 +10,7 @@
         "axios": "^1.6.0",
         "commander": "^11.1.0",
         "jsdom": "^22.1.0",
-        "puppeteer": "^21.3.8"
+        "puppeteer": "^21.3.8",
+        "winston": "^3.11.0"
     }
 }
