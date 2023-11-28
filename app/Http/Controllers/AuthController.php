@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -55,6 +56,6 @@ class AuthController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        return response()->json(['message' => 'User created'], 201);
+        return response()->json(['message' => 'User created'], Response::HTTP_CREATED);
     }
 }
