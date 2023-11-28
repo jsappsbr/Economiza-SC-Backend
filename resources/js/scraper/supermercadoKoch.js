@@ -84,8 +84,8 @@ async function scrapeProducts(browser, pageLink, storeValue) {
         logger.info(`Scraping ${currentPageLink} for store ${storeValue}`)
 
         const page = await browser.newPage();
-        await page.setRequestInterception(true);
 
+        await page.setRequestInterception(true);
         page.on('request', (request) => {
             if (['image', 'stylesheet', 'font'].indexOf(request.resourceType()) !== -1) {
                 request.abort();

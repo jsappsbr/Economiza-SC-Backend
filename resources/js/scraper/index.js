@@ -2,6 +2,7 @@ import {Command} from 'commander';
 import runSupermercadoKoch from './supermercadoKoch.js'
 import runFortAtacadista from './fortAtacadista.js'
 import runBistek from './bistek.js'
+import runAngeloni from './angeloni.js'
 
 const program = new Command();
 
@@ -23,5 +24,10 @@ program
     .command('bistek')
     .description('Scrape products from Bistek')
     .action(runBistek)
+
+program
+    .command('angeloni')
+    .description('Scrape products from Angeloni')
+    .action(runAngeloni)
 
 program.parse(process.argv)

@@ -7,6 +7,7 @@ use App\Traits\ValidatesCommandInputs;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductsScraper extends Command
 {
@@ -74,13 +75,22 @@ class ProductsScraper extends Command
 
     private function saveSupermercadoKochProducts(): void
     {
-        $rawJson = Storage::get('scraper/supermercado_koch_products.json');
-        $allProducts = json_decode($rawJson, true, flags: JSON_THROW_ON_ERROR);
+        $files = Storage::disk('local')->files('scraper/supermercado_koch');
 
-        foreach ($allProducts as $storeCode => $products) {
-            $market = Market::query()->where('code', $storeCode)->firstOrFail();
+        foreach ($files as $file) {
+            if (!Str::endsWith($file, '_products.json')) {
+                continue;
+            }
 
-            $this->info("Saving " . count($products) . " products for store $market->name");
+            $marketCode = explode('scraper/supermercado_koch/', $file)[1];
+            $marketCode = explode('_products.json', $marketCode)[0];
+
+            $market = Market::query()->where('code', $marketCode)->firstOrFail();
+
+            $raw = Storage::disk('local')->get($file);
+            $products = json_decode($raw, true, flags: JSON_THROW_ON_ERROR);
+
+            $this->info("Saving " . count($products) . " products for store $market->name from $file");
 
             foreach ($products as $product) {
                 $now = now();
@@ -108,6 +118,10 @@ class ProductsScraper extends Command
         $files = Storage::disk('local')->files('scraper/bistek');
 
         foreach ($files as $file) {
+            if (!Str::endsWith($file, '.json')) {
+                continue;
+            }
+
             $marketCode = explode('scraper/bistek/', $file)[1];
             $marketCode = explode('-', $marketCode)[0];
 
