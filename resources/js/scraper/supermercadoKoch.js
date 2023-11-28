@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import fs from 'node:fs';
+import fs from 'node:fs/promises';
 import logger from "./logging/index.js";
 
 // Got from the stores modal select that shows up when a
@@ -46,8 +46,10 @@ const run = async () => {
 
     const allProducts = {}
 
+    const storeValues = [...new Set(Object.values(STORES_SELECT_VALUES))]
+
     for (const initialPageLink of ALL_PAGES) {
-        for (const storeValue of [...new Set(Object.values(STORES_SELECT_VALUES))]) {
+        for (const storeValue of storeValues) {
             if (!allProducts[storeValue]) {
                 allProducts[storeValue] = []
             }
@@ -60,10 +62,18 @@ const run = async () => {
 
     await browser.close();
 
-    fs.writeFileSync(
-        'storage/app/scraper/supermercado_koch_products.json',
-        JSON.stringify(allProducts, null, 2)
-    )
+    logger.info('Saving products to disk')
+
+    const promises = storeValues.map(storeValue => {
+        return fs.writeFile(
+            `storage/app/scraper/supermercado_koch/${storeValue}_products.json`,
+            JSON.stringify(allProducts[storeValue], null, 2)
+        )
+    })
+
+    await Promise.all(promises)
+
+    logger.info('Finished scraping Supermercado Koch')
 }
 
 async function scrapeProducts(browser, pageLink, storeValue) {
