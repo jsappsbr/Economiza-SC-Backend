@@ -4,9 +4,12 @@
     <!-- Seção do Herói -->
     <section class="container mx-auto px-4 py-16 text-center">
         <h2 class="text-4xl md:text-5xl font-bold mb-4">Economize nas suas Compras de Mercado!</h2>
-        <p class="text-lg md:text-xl text-gray-700 mb-8">O Economiza SC ajuda você a encontrar os melhores preços nos produtos de supermercado.</p>
+        <p class="text-lg md:text-xl text-gray-700 mb-8">O Economiza SC ajuda você a encontrar os melhores preços nos
+            produtos de supermercado.</p>
         <div class="flex justify-center">
-            <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-lg md:text-xl font-medium">Baixe o App agora mesmo</button>
+            <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-lg md:text-xl font-medium">
+                Baixe o App agora mesmo
+            </button>
         </div>
     </section>
 
