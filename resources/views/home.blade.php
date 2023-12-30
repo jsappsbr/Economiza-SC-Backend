@@ -7,9 +7,9 @@
         <p class="text-lg md:text-xl text-gray-700 mb-8">O Economiza SC ajuda você a encontrar os melhores preços nos
             produtos de supermercado.</p>
         <div class="flex justify-center">
-            <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-lg md:text-xl font-medium">
+            <a href="https://play.google.com/store/apps/details?id=br.com.jsapps.economiza_sc" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-lg md:text-xl font-medium">
                 Baixe o App agora mesmo
-            </button>
+            </a>
         </div>
     </section>
 
